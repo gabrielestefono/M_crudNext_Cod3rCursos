@@ -1,12 +1,12 @@
-import firebase from "firebase/compat/app";
+import firebase from "../config"
 import Cliente from "../../core/Cliente";
 import ClienteRepositorio from "../../core/ClienteRepositorio";
 
 export default class ColecaoCliente implements ClienteRepositorio {
 
-    conversor = {
+    #conversor = {
         toFirestore(cliente: Cliente){
-            return {
+            return{
                 nome: cliente.nome,
                 idade: cliente.idade
             }
@@ -34,10 +34,10 @@ export default class ColecaoCliente implements ClienteRepositorio {
 
     async obterTodos(): Promise<Cliente[]>{
         const query = await this.colecao().get()
-        return query.docs.map(doc => doc.data()) ?? [] 
-    } 
+        return query.docs.map(doc => doc.data()) ?? []
+    }
 
     private colecao(){
-        return firebase.firestore().collection('clientes').withConverter(this.conversor)
+        return firebase.firestore().collection('clientes').withConverter(this.#conversor)
     }
 }
